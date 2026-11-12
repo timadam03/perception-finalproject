@@ -1,0 +1,25 @@
+# dont include the data folders and caches
+/data/
+__pycache__/
+
+# Distribution / packaging
+
+.DS_Store
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
