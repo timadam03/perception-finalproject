@@ -23,3 +23,6 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+
+# project description pdf
+/project-description.pdf
