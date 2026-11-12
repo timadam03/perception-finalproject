@@ -1,5 +1,7 @@
 # dont include the data folders and caches
 /data/
+/left/
+/right/
 __pycache__/
 
 # Distribution / packaging
