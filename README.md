@@ -17,9 +17,11 @@ Calibrate a stereo camera system, then detect and track the Husky A200 robot in 
 
 ```
 perception-finalproject/
-├── data/              # images, not in git (see below)
-├── results/           # outputs: plots, videos, etc.
-├── calibration.ipynb  # stereo calibration and rectification
+├── data/                     # images, not in git (see below)
+├── results/                  # outputs: plots, videos, etc.
+│   └── stereo_calib.npz      # saved calibration, used by stereo.py
+├── calibration.ipynb         # stereo calibration and rectification
+├── stereo.py                 # load the calibration and rectify image pairs
 └── README.md
 ```
 
@@ -52,7 +54,33 @@ data/
 
 ## Calibration
 
-Calibrate the stereo camera system with the images in `0_calib` and rectify the input images.
+Done in `calibration.ipynb` with the images in `0_calib`. The results are saved in `results/stereo_calib.npz`, so you don't need to run the calibration yourself.
+
+- Checkerboard: 7 x 5 inner corners, squares of 80 mm
+- Stereo reprojection error: about 0.21 px
+- Baseline: about 119 mm
+- All 3D values are in millimetres
+
+### How to use it
+
+Your notebook has to be in the root folder so the import and the path work.
+
+```python
+import cv2
+from stereo import load_rectification, rectify
+
+# once, at the top of the notebook
+mapL, mapR, Q = load_rectification()
+
+# for every frame
+imgL = cv2.imread("data/2_obstacle/left/000000.png")
+imgR = cv2.imread("data/2_obstacle/right/000000.png")
+rectL, rectR = rectify(imgL, imgR, mapL, mapR)
+```
+
+- Always compute disparity on the rectified images (`rectL`, `rectR`), not the raw ones.
+- `Q` turns a disparity map into 3D points: `points = cv2.reprojectImageTo3D(disparity, Q)`. The disparity has to be in pixels as a float. OpenCV's `StereoBM` and `StereoSGBM` return disparity multiplied by 16, so divide by 16 first.
+- If the calibration is changed, only `results/stereo_calib.npz` changes. Pull and your code keeps working.
 
 ## Sequences
 
