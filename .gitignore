@@ -1,9 +1,7 @@
 # dont include the data folders and caches
-/data/
-/left/
-/right/
+data/
 __pycache__/
-
+    
 # Distribution / packaging
 
 .DS_Store
