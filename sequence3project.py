@@ -57,7 +57,7 @@ DEPTH_PATCH_SCALE = 2.5
 MAX_DISPARITY_MAD = 12.0
 
 # Keep the working Kalman noise parameters
-PROCESS_NOISE = 0.005
+PROCESS_NOISE = 0.05
 MEASUREMENT_NOISE = 2.5
 
 # Lucas-Kanade parameters (Week 2 exercise)
@@ -94,7 +94,7 @@ def natural_key(path):
 
 def image_files(folder):
     files = []
-    for extension in ("*.png", "*.jpg", "*.jpeg", "*.bmp", "*.tif"):
+    for extension in ("*.png", "*.jpg", "*.jpeg"):
         files.extend(glob.glob(str(Path(folder) / extension)))
     return sorted(files, key=natural_key)
 
@@ -200,7 +200,7 @@ def detect_robot(image, previous_position, previous_gray=None):
             continue
         cx = moments['m10'] / moments['m00']
         cy = moments['m01'] / moments['m00']
-        if not (H * 0.45 <= cy <= H * 0.98):
+        if not (H * 0.5 <= cy <= H * 0.95):
             continue
 
         if previous_position is None:
@@ -241,8 +241,7 @@ stereo = cv2.StereoSGBM_create(
     uniquenessRatio=10,
     speckleWindowSize=100,
     speckleRange=2,
-    mode=cv2.STEREO_SGBM_MODE_SGBM_3WAY
-)
+    mode=cv2.STEREO_SGBM_MODE_SGBM_3WAY)
 
 
 def disparity_map(left, right):
@@ -661,5 +660,4 @@ if flow_image is not None:
 
 print(
     "\nThe 3D viewer axes each span 20 metres. "
-    "The displayed depth axis is 0 to 20 m; X and height are -10 to +10 m."
-)
+    "The displayed depth axis is 0 to 20 m; X and height are -10 to +10 m.")
